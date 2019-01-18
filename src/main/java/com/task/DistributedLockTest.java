@@ -10,6 +10,7 @@ import javax.annotation.PreDestroy;
 import org.redisson.api.RLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.redis.RedisPoolUtil;
@@ -21,8 +22,8 @@ import com.redis.redssion.RedissonManager;
 public class DistributedLockTest {
     private static ExecutorService  executor = Executors.newFixedThreadPool(10);
 	private static Logger log = LoggerFactory.getLogger(DistributedLockTest.class);
-   // @Autowired
-    private static RedissonManager redissonManager=new RedissonManager();
+    @Autowired
+    private static RedissonManager redissonManager;
     private String Lockkey="_LOCK";
     @PreDestroy
     public void delLock(){

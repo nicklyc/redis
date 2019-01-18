@@ -26,7 +26,6 @@ public class RedissonManager {
     private static Integer redis1Port = Integer.parseInt(PropertiesUtil.getProperty("redis1.port"));
 
     
-    //Redssion  不支付分布式一致性算法，所以只能用一个redis
     @PostConstruct
     private void init(){
         try {
