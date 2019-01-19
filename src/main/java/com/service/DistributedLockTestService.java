@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.annotation.DistributedLock;
 import com.redis.RedisPoolUtil;
 import com.redis.redssion.RedissonManager;
 
@@ -32,7 +33,7 @@ public class DistributedLockTestService {
 	 
 	 
 		/**
-		 * 模拟业务处理的读改写
+		 * 加锁的业务读写
 		 */
 		 public void handle2(String userCount){
 			 String lockey=userCount+"lockey";
@@ -40,33 +41,46 @@ public class DistributedLockTestService {
 			// RLock lock = redissonManager.getRedisson().getFairLock(lockey);
 		        boolean getLock = false;
 		        try {
-		        	// 锁住3秒自动解锁，
-		        	lock.lock(2, TimeUnit.SECONDS);
-		        	if(lock.isHeldByCurrentThread()){
-		        		getLock=true;
-	            	    handle(userCount);
-		        	}else{
-		        		 log.info("Redisson没有获取到分布式锁:{},ThreadName:{}",lockey,Thread.currentThread().getName());
-		        	}
-		        	
-//		            if(getLock = lock.tryLock(3,5, TimeUnit.SECONDS)){
-//		                //log.info("Redisson获取到分布式锁:{},ThreadName:{}",lockey,Thread.currentThread().getName());
-//		            	System.out.println(i);
-//		            	handle(userCount);
-//		                i++;
-//		            }else{
-//		                log.info("Redisson没有获取到分布式锁:{},ThreadName:{}",lockey,Thread.currentThread().getName());
-//		            }
+//		        	// 锁住3秒自动解锁，
+//		        	lock.lock(3, TimeUnit.SECONDS);
+//		        	if(lock.isHeldByCurrentThread()){
+//		        		getLock=true;
+//	            	    handle(userCount);
+//		        	}else{
+//		        		 log.info("Redisson没有获取到分布式锁:{},ThreadName:{}",lockey,Thread.currentThread().getName());
+//		        	}
+		            if(getLock = lock.tryLock(3,5, TimeUnit.SECONDS)){
+		                log.info("获取到锁:{},ThreadName:{}",lockey,Thread.currentThread().getName());
+		                handle(userCount);
+    		            }else{
+		                log.info("没有获取到锁:{},ThreadName:{}",lockey,Thread.currentThread().getName());
+		            }
 		        } catch (Exception e) {
-		            log.error("Redisson分布式锁获取异常",e);
+		            log.error("锁获取异常",e);
 		        } finally {
 		            if(!getLock){
 		                return;
 		            }
 		            lock.unlock();
-		            log.info("Redisson分布式锁释放锁");
+		            log.info("释放锁");
 		        }
 		      
 		       
 		    }
+		 
+		 
+		 
+		 
+		 
+		 
+			  /**
+			   * 
+			   * @param userCount
+			   */
+		     @DistributedLock(argNum = 1, lockNamePost = ".lock")
+			 public void handle3(String userCount){
+		    	    handle(userCount);
+			    }
+			 
+			 
 }

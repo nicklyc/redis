@@ -32,7 +32,7 @@ public class RedissonManager {
         	String address = new StringBuilder().append(redis1Ip).append(":").append(redis1Port).toString();
             config.useSingleServer().setAddress(address);//host:port
 
-            redisson = (Redisson) Redisson.create(config);
+           // redisson = (Redisson) Redisson.create(config);
 
             logger.info("初始化Redisson结束");
         } catch (Exception e) {

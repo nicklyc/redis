@@ -51,12 +51,13 @@
 		<version>2.9.1</version>
 	</dependency>
 	<!--  -->
+<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
 <dependency>
-    <groupId>org.redisson</groupId>
-    <artifactId>redisson</artifactId>
-    <version>2.9.1</version>
+    <groupId>commons-beanutils</groupId>
+    <artifactId>commons-beanutils</artifactId>
+    <version>1.9.3</version>
 </dependency>
-<!--  -->
+
 <dependency>
     <groupId>com.fasterxml.jackson.dataformat</groupId>
     <artifactId>jackson-dataformat-avro</artifactId>
